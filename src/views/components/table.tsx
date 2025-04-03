@@ -20,10 +20,10 @@ import JobBage from "./job-bage";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogPortal,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import PDFViewer from "./pdf-viewer";
 
 export type HeaderType = {
   title: string;
@@ -118,13 +118,20 @@ const CustomTable = ({
                   )}
                   {header.key === "name" ? (
                     <div className="flex gap-2 items-center">
-                      <img
-                        src={row.imageUrl}
-                        alt={row.name}
-                        width={24}
-                        height={24}
-                        className="rounded-full"
-                      />
+                      {row.imageUrl ? (
+                        <img
+                          src={row.imageUrl}
+                          alt={row.name}
+                          width={24}
+                          height={24}
+                          className="rounded-full size-[24px]"
+                        />
+                      ) : (
+                        <div className="size-[24px] border flex items-center justify-center rounded-full bg-gray-300">
+                          <p>{row.name.charAt(0)}</p>
+                        </div>
+                      )}
+
                       <p>{row.name}</p>
                     </div>
                   ) : header.key === "rating" ? (
@@ -132,14 +139,14 @@ const CustomTable = ({
                   ) : header.key === "resume" ? (
                     <Dialog>
                       <DialogTrigger asChild>
-                        <img src={pdfIcon} alt="pdf" />
+                      <img src={pdfIcon} alt="pdf" />
                       </DialogTrigger>
                       <DialogPortal>
-                        <DialogContent className="max-w-4xl">
-                          <div className="mt-4">
-                            <p>burak</p>
-                          </div>
-                        </DialogContent>
+                      <DialogContent className="max-w-5xl h-[680px] right-0 ">
+                        <div className="mt-4">
+                        <PDFViewer pdfUrl={row.resume} />
+                        </div>
+                      </DialogContent>
                       </DialogPortal>
                     </Dialog>
                   ) : header.key === "appliedJob" ? (

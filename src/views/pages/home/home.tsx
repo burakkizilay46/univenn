@@ -85,6 +85,81 @@ const GET_DATA = gql`
         latestResume {
           url
         }
+        activeApplication {
+          id
+          createdAt
+          updatedAt
+          coverLetter
+          lexorank
+          score
+          aiFit
+          salaryExp
+          salaryExpCurr
+          salaryExpPeriod
+          seeded
+          sourceType
+          sourceLink
+          deleted
+          deletedAt
+          deletedById
+          jobListingId
+          applicantId
+          stageId
+          companyId
+          rejectedReasonId
+          hasEvent
+          isViewedByMe
+          myOverallEvaluationAnswer
+          jobListing {
+            id
+            createdAt
+            updatedAt
+            publishedAt
+            draftedAt
+            archivedAt
+            name
+            slug
+            description
+            jobRequirements
+            salary
+            salary2
+            salaryCurr
+            salaryPeriod
+            status
+            location
+            latitude
+            longitude
+            city
+            state
+            postalCode
+            country
+            countryCode
+            color
+            type
+            seeded
+            isPreferred
+            preferredCurrency
+            preferredPeriod
+            workTypeId
+            requiredExperienceId
+            employmentTypeId
+            departmentId
+            teamId
+            companyEntegrationId
+            createdById
+            companyId
+          }
+          stage {
+            id
+            createdAt
+            updatedAt
+            name
+            type
+            lexorank
+            companyId
+            isLocked
+          }
+        }
       }
     }
   }
@@ -92,12 +167,11 @@ const GET_DATA = gql`
 
 const HomeView = () => {
   const { loading, error, data } = useQuery(GET_DATA);
-  console.log("🚀 ~ HomeView ~ data:", data)
+  console.log("🚀 ~ HomeView ~ data:", data);
 
   const [search, setSearch] = useState<string>("");
   const debouncedSearch = useDebouncedValue(search, 300);
   const [tableData, setTableData] = useState<DataType[]>([]);
-  console.log("🚀 ~ HomeView ~ tableData:", tableData)
 
   const [selectedFilter, setSelectedFilter] =
     useState<keyof SortItemType>("name");
@@ -113,11 +187,11 @@ const HomeView = () => {
       imageUrl: applicant.profilePhotoUrl,
       name: `${applicant.firstName} ${applicant.lastName}`,
       email: applicant.email,
-      stage: "Applied",
+      stage: applicant.activeApplication.stage.name,
       rating: applicant.avgRating || applicant.rating || 0,
-      appliedJob: "Not Specified",
+      appliedJob: applicant.activeApplication.jobListing.name,
       resume: applicant.latestResume?.url || "No resume available",
-      aiFitScore: "N/A",
+      aiFitScore: applicant.activeApplication.aiFit || "No AI Fit Score",
       source: applicant.sourceType,
       dateAdded: new Date(applicant.createdAt).toLocaleDateString(),
     }));
