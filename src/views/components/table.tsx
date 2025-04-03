@@ -25,7 +25,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-type HeaderType = {
+export type HeaderType = {
   title: string;
   key: keyof DataType;
   checked: boolean;

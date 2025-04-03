@@ -4,9 +4,13 @@ import columnsIcon from "@/../public/images/svg/columns.svg";
 import sheetIcon from "@/../public/images/svg/sheet-view.svg";
 import flash from "@/../public/images/svg/flash.svg";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import CustomPopover from "@/views/components/popover";
-import CustomTable from "@/views/components/table";
+import CustomTable, { HeaderType } from "@/views/components/table";
 import { Switch } from "@/components/ui/switch";
 import { DataType, mockData } from "@/types/data-type";
 import useDebouncedValue from "@/hooks/useDebounce";
@@ -17,36 +21,41 @@ const HomeView = () => {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 300);
   const [tableData, setTableData] = useState<DataType[]>(mockData);
-  const [selectedFilter, setSelectedFilter] = useState<keyof SortItemType>("name");
+  const [selectedFilter, setSelectedFilter] =
+    useState<keyof SortItemType>("name");
   const [selectedDirection, setSelectedDirection] = useState<string>(
     sortItems[selectedFilter].directions[0]
   );
 
-  const [headers, setHeaders] = useState<
-    { title: string; key: keyof DataType; checked: boolean }[]
-  >([
+  const [headers, setHeaders] = useState<HeaderType[]>([
     { title: "Name", key: "name", checked: true },
     { title: "Email", key: "email", checked: true },
     { title: "Stage", key: "stage", checked: true },
     { title: "Rating", key: "rating", checked: true },
     { title: "Applied Job", key: "appliedJob", checked: true },
+    { title: "AI Fit Score", key: "aiFitScore", checked: true },
+    { title: "Source", key: "source", checked: true },
+    { title: "Date Added", key: "dateAdded", checked: true },
     { title: "Resume", key: "resume", checked: true },
   ]);
 
   // Sıralanmış veri
   const sortedData = useMemo(() => {
-    const direction = selectedDirection === "A-Z" || selectedDirection === "Low to High" ? "asc" : "desc";
-    
+    const direction =
+      selectedDirection === "A-Z" || selectedDirection === "Low to High"
+        ? "asc"
+        : "desc";
+
     return [...tableData].sort((a, b) => {
       // Rating için özel sıralama
       if (selectedFilter === "rating") {
         return direction === "asc" ? a.rating - b.rating : b.rating - a.rating;
       }
-      
+
       // Diğer alanlar için string sıralama
       const aValue = a[selectedFilter].toString();
       const bValue = b[selectedFilter].toString();
-      
+
       return direction === "asc"
         ? aValue.localeCompare(bValue, "tr")
         : bValue.localeCompare(aValue, "tr");
@@ -68,10 +77,13 @@ const HomeView = () => {
       setTableData(mockData);
     } else {
       setTableData(
-        mockData.filter((item) =>
-          item.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-          item.email.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-          item.appliedJob.toLowerCase().includes(debouncedSearch.toLowerCase())
+        mockData.filter(
+          (item) =>
+            item.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+            item.email.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+            item.appliedJob
+              .toLowerCase()
+              .includes(debouncedSearch.toLowerCase())
         )
       );
     }
