@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import classNames from "classnames";
 import dotsIcon from "@/../public/images/svg/dots.svg";
+import pdfIcon from "@/../public/images/png/pdf-logo.png";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -12,6 +13,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DataType } from "@/types/data-type";
+import { StageLabel } from "./stage-label";
+import RatingStars from "./rating";
+import JobBage from "./job-bage";
 
 type HeaderType = {
   title: string;
@@ -79,7 +83,7 @@ const CustomTable = ({
                 {header.title}
               </TableHead>
             ))}
-            <TableHead className="px-4">Actions</TableHead>
+            <TableHead className="px-4" />
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -99,16 +103,19 @@ const CustomTable = ({
                       onCheckedChange={() => handleRowSelect(row.id)}
                     />
                   )}
-                  {header.key === "imageUrl" ? (
-                    <img
-                      src={row.imageUrl}
-                      alt={row.name}
-                      width={32}
-                      height={32}
-                      className="rounded-full"
-                    />
+                  {header.key === "name" ? (
+                    <div className="flex gap-2 items-center">
+                      <img
+                        src={row.imageUrl}
+                        alt={row.name}
+                        width={24}
+                        height={24}
+                        className="rounded-full"
+                      />
+                      <p>{row.name}</p>
+                    </div>
                   ) : header.key === "rating" ? (
-                    <span>{"★".repeat(row.rating)}</span>
+                    <RatingStars rating={row.rating} />
                   ) : header.key === "resume" ? (
                     <a
                       href={row.resume}
@@ -116,8 +123,12 @@ const CustomTable = ({
                       rel="noopener noreferrer"
                       className="text-blue-500 underline"
                     >
-                      PDF
+                      <img src={pdfIcon} alt="pdf-logo" />
                     </a>
+                  ) : header.key === "appliedJob" ? (
+                    <JobBage title={row.appliedJob} />
+                  ) : header.key === "stage" ? (
+                    <StageLabel title={row.stage} />
                   ) : (
                     row[header.key]
                   )}
