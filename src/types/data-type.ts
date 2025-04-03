@@ -4,7 +4,7 @@ export type DataType = {
   name: string;
   email: string;
   stage: "Applied" | "Interview" | "Evaluation" | "Offer" | "Contacted";
-  rating: number;
+  rating: number; 
   appliedJob: string;
   resume: string;
   aiFitScore: string;

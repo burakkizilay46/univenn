@@ -67,7 +67,7 @@ const CustomTable = ({
   const isAllSelected = selectedRows.size === data.length && data.length > 0;
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto h-screen">
       <Table className="w-full">
         <TableCaption className={caption ? "" : "sr-only"}>
           {caption}
@@ -136,7 +136,6 @@ const CustomTable = ({
                       </DialogTrigger>
                       <DialogPortal>
                         <DialogContent className="max-w-4xl">
-                          <DialogHeader></DialogHeader>
                           <div className="mt-4">
                             <p>burak</p>
                           </div>

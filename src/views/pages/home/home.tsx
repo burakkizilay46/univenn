@@ -12,34 +12,125 @@ import {
 import CustomPopover from "@/views/components/popover";
 import CustomTable, { HeaderType } from "@/views/components/table";
 import { Switch } from "@/components/ui/switch";
-import { DataType, mockData } from "@/types/data-type";
+import { DataType } from "@/types/data-type";
 import useDebouncedValue from "@/hooks/useDebounce";
 import SortContent from "@/views/components/sort-content";
 import { sortItems, SortItemType } from "@/data/sort-items";
+import { tableHeaders } from "@/data/headers";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_DATA = gql`
+  query GetCompanyApplicantList {
+    getCompanyApplicantList(page: 1, pageSize: 29, sort: { createdAt: desc }) {
+      total
+      pages
+      applicants {
+        id
+        createdAt
+        updatedAt
+        email
+        firstName
+        lastName
+        avgRating
+        profilePhotoUrl
+        linkedinUrl
+        linkedinUsername
+        linkedinBio
+        linkedinEducations
+        linkedinExperiences
+        linkedinLicenseAndCertifications
+        linkedinVolunteeringExperiences
+        linkedinLanguages
+        githubUrl
+        githubUsername
+        githubBio
+        githubCompany
+        githubWebsite
+        githubPublicRepoCount
+        githubLastYearContributionCount
+        githubGainedStarCount
+        githubGainedForkCount
+        twitterUrl
+        twitterUsername
+        twitterBio
+        twitterJob
+        twitterWebsite
+        sourceType
+        sourceLink
+        sourceUpdatedAt
+        seeded
+        phoneNumber
+        address
+        latitude
+        longitude
+        country
+        gender
+        gradUni
+        dateOfBirth
+        salaryExp
+        salaryExp2
+        salaryExpCurr
+        salaryExpPeriod
+        experience
+        educationalBackground
+        maritalStatus
+        universityId
+        companyId
+        universityName
+        isViewedByMe
+        isSentToTeamso
+        age
+        rating
+        isFavoritedByMe
+        latestResume {
+          url
+        }
+      }
+    }
+  }
+`;
 
 const HomeView = () => {
-  const [search, setSearch] = useState("");
+  const { loading, error, data } = useQuery(GET_DATA);
+  console.log("🚀 ~ HomeView ~ data:", data)
+
+  const [search, setSearch] = useState<string>("");
   const debouncedSearch = useDebouncedValue(search, 300);
-  const [tableData, setTableData] = useState<DataType[]>(mockData);
+  const [tableData, setTableData] = useState<DataType[]>([]);
+  console.log("🚀 ~ HomeView ~ tableData:", tableData)
+
   const [selectedFilter, setSelectedFilter] =
     useState<keyof SortItemType>("name");
   const [selectedDirection, setSelectedDirection] = useState<string>(
     sortItems[selectedFilter].directions[0]
   );
 
-  const [headers, setHeaders] = useState<HeaderType[]>([
-    { title: "Name", key: "name", checked: true },
-    { title: "Email", key: "email", checked: true },
-    { title: "Stage", key: "stage", checked: true },
-    { title: "Rating", key: "rating", checked: true },
-    { title: "Applied Job", key: "appliedJob", checked: true },
-    { title: "AI Fit Score", key: "aiFitScore", checked: true },
-    { title: "Source", key: "source", checked: true },
-    { title: "Date Added", key: "dateAdded", checked: true },
-    { title: "Resume", key: "resume", checked: true },
-  ]);
+  function transformData(inputData: any): DataType[] {
+    const applicants = inputData.getCompanyApplicantList.applicants;
 
-  // Sıralanmış veri
+    return applicants.map((applicant: any, index: number) => ({
+      id: index + 1,
+      imageUrl: applicant.profilePhotoUrl,
+      name: `${applicant.firstName} ${applicant.lastName}`,
+      email: applicant.email,
+      stage: "Applied",
+      rating: applicant.avgRating || applicant.rating || 0,
+      appliedJob: "Not Specified",
+      resume: applicant.latestResume?.url || "No resume available",
+      aiFitScore: "N/A",
+      source: applicant.sourceType,
+      dateAdded: new Date(applicant.createdAt).toLocaleDateString(),
+    }));
+  }
+
+  useEffect(() => {
+    if (data) {
+      setTableData(transformData(data));
+    }
+  }, [data]);
+
+  const [headers, setHeaders] = useState<HeaderType[]>(tableHeaders);
+
   const sortedData = useMemo(() => {
     const direction =
       selectedDirection === "A-Z" || selectedDirection === "Low to High"
@@ -47,12 +138,10 @@ const HomeView = () => {
         : "desc";
 
     return [...tableData].sort((a, b) => {
-      // Rating için özel sıralama
       if (selectedFilter === "rating") {
         return direction === "asc" ? a.rating - b.rating : b.rating - a.rating;
       }
 
-      // Diğer alanlar için string sıralama
       const aValue = a[selectedFilter].toString();
       const bValue = b[selectedFilter].toString();
 
@@ -74,10 +163,10 @@ const HomeView = () => {
 
   useEffect(() => {
     if (!debouncedSearch.trim()) {
-      setTableData(mockData);
+      setTableData(tableData);
     } else {
       setTableData(
-        mockData.filter(
+        tableData.filter(
           (item) =>
             item.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
             item.email.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
@@ -88,6 +177,9 @@ const HomeView = () => {
       );
     }
   }, [debouncedSearch]);
+
+  if (loading) return <p>Yükleniyor...</p>;
+  if (error) return <p>Hata: {error.message}</p>;
 
   return (
     <div className="h-full w-full pt-6">

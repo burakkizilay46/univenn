@@ -4,7 +4,7 @@ import HomeView from '../pages/home/home'
 
 const Main = () => {
   return (
-    <div className="mx-8 w-full max-h-screen">
+    <div className="mx-8 w-full h-screen ">
         <MainHeader />
         <HomeView />
     </div>
