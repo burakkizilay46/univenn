@@ -257,7 +257,7 @@ const HomeView = () => {
 
   return (
     <div className="h-full w-full pt-6">
-      <div className="flex justify-end h-8 gap-3 items-center">
+      <div className="grid grid-rows-3 md:flex md:justify-end md:h-8 gap-3 items-center">
         <Input
           placeholder="Search"
           className="h-8 w-[140px] rounded-md border border-gray-300"

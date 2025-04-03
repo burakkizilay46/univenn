@@ -3,7 +3,7 @@ import plusIcon from "@/../public/images/svg/plus-icon.svg";
 
 const MainHeader = () => {
   return (
-    <div className="h-[82px] w-full flex justify-between border-b">
+    <div className="h-[82px] w-full flex  justify-between border-b">
         <div>
           <div className="flex items-center gap-4">
             <p className="font-semibold text-[30px]">Talent Pool</p>
