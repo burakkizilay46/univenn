@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import sortIcon from "@/../public/images/svg/sort.svg";
 import columnsIcon from "@/../public/images/svg/columns.svg";
 import sheetIcon from "@/../public/images/svg/sheet-view.svg";
@@ -12,18 +12,23 @@ import {
 import CustomPopover from "@/views/components/popover";
 import CustomTable from "@/views/components/table";
 import { Switch } from "@/components/ui/switch";
-import { DataType, tableData } from "@/types/data-type";
+import { DataType, mockData } from "@/types/data-type";
+import useDebouncedValue from "@/hooks/useDebounce";
 
 const HomeView = () => {
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search, 300);
+  const [tableData, setTableData] = useState<DataType[]>(mockData);
+
   const [headers, setHeaders] = useState<
     { title: string; key: keyof DataType; checked: boolean }[]
   >([
     { title: "Name", key: "name", checked: true },
     { title: "Email", key: "email", checked: true },
     { title: "Stage", key: "stage", checked: true },
-    { title: "Rating", key: "rating", checked: false },
-    { title: "Applied Job", key: "appliedJob", checked: false },
-    { title: "Resume", key: "resume", checked: false },
+    { title: "Rating", key: "rating", checked: true },
+    { title: "Applied Job", key: "appliedJob", checked: true },
+    { title: "Resume", key: "resume", checked: true },
   ]);
 
   const handleSwitchChange = (index: number) => {
@@ -36,12 +41,26 @@ const HomeView = () => {
     }
   };
 
+  useEffect(() => {
+    if (!debouncedSearch.trim()) {
+      setTableData(mockData);
+    } else {
+      setTableData(
+        mockData.filter((item) =>
+          item.name.toLowerCase().includes(debouncedSearch.toLowerCase())
+        )
+      );
+    }
+  }, [debouncedSearch]);
+
   return (
     <div className="h-full w-full pt-6">
       <div className="flex justify-end h-8 gap-3 items-center">
         <Input
           placeholder="Search"
           className="h-8 w-[140px] rounded-md border border-gray-300"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
 
         <CustomPopover label="Sort" icon={sortIcon}>
