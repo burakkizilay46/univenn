@@ -11,111 +11,126 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DataType } from "@/types/data-type";
 
-type CustomTableProps = {
-  headers: string[];
-  data?: Array<Record<string, string>>;
-  caption?: string;
+type HeaderType = {
+  title: string;
+  key: keyof DataType;
+  checked: boolean;
 };
 
-type RowData = Record<string, string>;
+type CustomTableProps = {
+  headers: HeaderType[];
+  data?: DataType[];
+  caption?: string;
+};
 
 const CustomTable = ({
   headers,
   data = [],
-  caption = "A list of your recent invoices.",
+  caption = "A list of your recent candidates.",
 }: CustomTableProps) => {
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
 
-  const tableRows = useMemo(() => {
-    if (data.length > 0) {
-      return data;
-    }
-    return Array.from({ length: 50 }).map((_, index) =>
-      headers.reduce((row, header) => {
-        row[header] = header;
-        return row;
-      }, {} as RowData)
-    );
-  }, [data, headers]);
+  const visibleHeaders = headers.filter((header) => header.checked);
 
   const handleSelectAll = () => {
-    if (selectedRows.size === tableRows.length) {
+    if (selectedRows.size === data.length) {
       setSelectedRows(new Set());
     } else {
-      const allRowIndices = tableRows.map((_, index) => index);
-      setSelectedRows(new Set(allRowIndices));
+      setSelectedRows(new Set(data.map((row) => row.id)));
     }
   };
 
-  const handleRowSelect = (rowIndex: number) => {
+  const handleRowSelect = (rowId: number) => {
     const newSelectedRows = new Set(selectedRows);
-    if (newSelectedRows.has(rowIndex)) {
-      newSelectedRows.delete(rowIndex);
+    if (newSelectedRows.has(rowId)) {
+      newSelectedRows.delete(rowId);
     } else {
-      newSelectedRows.add(rowIndex);
+      newSelectedRows.add(rowId);
     }
     setSelectedRows(newSelectedRows);
   };
 
-  const isAllSelected =
-    selectedRows.size === tableRows.length && tableRows.length > 0;
+  const isAllSelected = selectedRows.size === data.length && data.length > 0;
 
   return (
-    <Table>
-      <TableCaption className={caption ? "" : "sr-only"}>
-        {caption}
-      </TableCaption>
-      <TableHeader>
-        <TableRow>
-          {headers.map((header, index) => (
-            <TableHead
-              key={`header-${header}-${index}`}
-              className={classNames("border-r pl-4", {
-                "flex gap-2 items-center justify-start": index === 0,
-              })}
-            >
-              {index === 0 && (
-                <Checkbox
-                  className="size-5 bg-white"
-                  aria-label="Select all rows"
-                  checked={isAllSelected}
-                  onCheckedChange={handleSelectAll}
-                />
-              )}
-              {header}
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {tableRows.map((row, rowIndex) => (
-          <TableRow key={`row-${rowIndex}`}>
-            {headers.map((header, colIndex) => (
-              <TableCell
-                key={`cell-${header}-${rowIndex}-${colIndex}`}
-                className={classNames("border-r pl-4 py-[10px]", {
-                  "flex gap-2 items-center justify-start": colIndex === 0,
+    <div className="w-full overflow-x-auto">
+      <Table className="w-full">
+        <TableCaption className={caption ? "" : "sr-only"}>
+          {caption}
+        </TableCaption>
+        <TableHeader>
+          <TableRow>
+            {visibleHeaders.map((header, index) => (
+              <TableHead
+                key={header.key}
+                className={classNames("border-r px-4", {
+                  "flex gap-2 items-center justify-start": index === 0,
                 })}
               >
-                {colIndex === 0 && (
+                {index === 0 && (
                   <Checkbox
-                    className="size-5 bg-white"
-                    aria-label={`Select row ${rowIndex + 1}`}
-                    checked={selectedRows.has(rowIndex)}
-                    onCheckedChange={() => handleRowSelect(rowIndex)}
+                    aria-label="Select all rows"
+                    checked={isAllSelected}
+                    onCheckedChange={handleSelectAll}
                   />
                 )}
-                {row[header]}
-              </TableCell>
+                {header.title}
+              </TableHead>
             ))}
-            <TableCell className="pl-4">
-              <img src={dotsIcon} alt="" className="w-5 h-5" />
-            </TableCell>
+            <TableHead className="px-4">Actions</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {data.map((row) => (
+            <TableRow key={row.id}>
+              {visibleHeaders.map((header, colIndex) => (
+                <TableCell
+                  key={`${header.key}-${row.id}`}
+                  className={classNames("border-r px-4 py-[10px]", {
+                    "flex gap-2 items-center justify-start": colIndex === 0,
+                  })}
+                >
+                  {colIndex === 0 && (
+                    <Checkbox
+                      aria-label={`Select row ${row.id}`}
+                      checked={selectedRows.has(row.id)}
+                      onCheckedChange={() => handleRowSelect(row.id)}
+                    />
+                  )}
+                  {header.key === "imageUrl" ? (
+                    <img
+                      src={row.imageUrl}
+                      alt={row.name}
+                      width={32}
+                      height={32}
+                      className="rounded-full"
+                    />
+                  ) : header.key === "rating" ? (
+                    <span>{"★".repeat(row.rating)}</span>
+                  ) : header.key === "resume" ? (
+                    <a
+                      href={row.resume}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      PDF
+                    </a>
+                  ) : (
+                    row[header.key]
+                  )}
+                </TableCell>
+              ))}
+              <TableCell className="px-4">
+                <img src={dotsIcon} alt="More options" className="w-5 h-5" />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 
