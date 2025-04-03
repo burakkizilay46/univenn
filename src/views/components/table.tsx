@@ -1,6 +1,7 @@
 import { useState } from "react";
 import classNames from "classnames";
 import dotsIcon from "@/../public/images/svg/dots.svg";
+import downArrowIcon from "@/../public/images/svg/down-arrow.svg";
 import pdfIcon from "@/../public/images/png/pdf-logo.png";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -16,6 +17,13 @@ import { DataType } from "@/types/data-type";
 import { StageLabel } from "./stage-label";
 import RatingStars from "./rating";
 import JobBage from "./job-bage";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogPortal,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type HeaderType = {
   title: string;
@@ -80,7 +88,12 @@ const CustomTable = ({
                     onCheckedChange={handleSelectAll}
                   />
                 )}
-                {header.title}
+                <div className="flex justify-between">
+                  {header.title}
+                  {(header.key === "stage" || header.key === "rating") && (
+                    <img src={downArrowIcon} alt="down-icon" />
+                  )}
+                </div>
               </TableHead>
             ))}
             <TableHead className="px-4" />
@@ -117,14 +130,19 @@ const CustomTable = ({
                   ) : header.key === "rating" ? (
                     <RatingStars rating={row.rating} />
                   ) : header.key === "resume" ? (
-                    <a
-                      href={row.resume}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 underline"
-                    >
-                      <img src={pdfIcon} alt="pdf-logo" />
-                    </a>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <img src={pdfIcon} alt="pdf" />
+                      </DialogTrigger>
+                      <DialogPortal>
+                        <DialogContent className="max-w-4xl">
+                          <DialogHeader></DialogHeader>
+                          <div className="mt-4">
+                            <p>burak</p>
+                          </div>
+                        </DialogContent>
+                      </DialogPortal>
+                    </Dialog>
                   ) : header.key === "appliedJob" ? (
                     <JobBage title={row.appliedJob} />
                   ) : header.key === "stage" ? (

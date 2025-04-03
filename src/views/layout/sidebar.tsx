@@ -1,6 +1,7 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { sidebarBottomItems, sidebarItems } from "@/data/sidebar-items";
 import avatar from "@/../public/images/png/avatar.png"
+import down from "@/../public/images/svg/down.svg"
 
 const Sidebar = () => {
   return (
@@ -11,7 +12,7 @@ const Sidebar = () => {
           <div className="bg-[#9600D7] size-8 rounded-lg"></div>
           <p className="font-medium text-base">Hrpanda</p>
         </div>
-        <p className="rotate-90">{">"}</p>
+        <img src={down} alt="down"/>
       </div>
 
       {/* Sidebar Menu */}

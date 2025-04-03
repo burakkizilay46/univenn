@@ -18,7 +18,7 @@ export const mockData: DataType[] = [
     stage: "Applied",
     rating: 4,
     appliedJob: "Sr. Frontend Dev.",
-    resume: "/pdfs/resume-1.pdf",
+    resume: "resume.pdf",
   },
   {
     id: 2,
@@ -28,7 +28,7 @@ export const mockData: DataType[] = [
     stage: "Interview",
     rating: 5,
     appliedJob: "Software Engineer",
-    resume: "/pdfs/resume-2.pdf",
+    resume: "resume.pdf",
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ export const mockData: DataType[] = [
     stage: "Evaluation",
     rating: 3,
     appliedJob: "Operations Manager",
-    resume: "/pdfs/resume-3.pdf",
+    resume: "resume.pdf",
   },
   {
     id: 4,
@@ -48,7 +48,7 @@ export const mockData: DataType[] = [
     stage: "Applied",
     rating: 4,
     appliedJob: "Software Engineer",
-    resume: "/pdfs/resume-4.pdf",
+    resume: "resume.pdf",
   },
   {
     id: 5,
@@ -58,7 +58,7 @@ export const mockData: DataType[] = [
     stage: "Offer",
     rating: 5,
     appliedJob: "UI/UX Designer",
-    resume: "/pdfs/resume-5.pdf",
+    resume: "resume.pdf",
   },
   {
     id: 6,
@@ -68,7 +68,7 @@ export const mockData: DataType[] = [
     stage: "Evaluation",
     rating: 3,
     appliedJob: "Financial Analyst",
-    resume: "/pdfs/resume-6.pdf",
+    resume: "resume.pdf",
   },
   {
     id: 7,
@@ -78,6 +78,6 @@ export const mockData: DataType[] = [
     stage: "Contacted",
     rating: 4,
     appliedJob: "Backend Developer",
-    resume: "/pdfs/resume-7.pdf",
+    resume: "resume.pdf",
   },
 ];
