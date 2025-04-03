@@ -15,7 +15,7 @@ const CustomPopover: React.FC<CustomPopoverProps> = ({ icon, label, children }) 
         {label && <p className="font-semibold text-xs leading-[18px]">{label}</p>}
         <img src={down} alt="down"/>
       </PopoverTrigger>
-      <PopoverContent className="w-[212px]">{children}</PopoverContent>
+      <PopoverContent className="min-w-[212px]" align="end">{children}</PopoverContent>
     </Popover>
   );
 };

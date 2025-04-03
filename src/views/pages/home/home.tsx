@@ -1,24 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import sortIcon from "@/../public/images/svg/sort.svg";
 import columnsIcon from "@/../public/images/svg/columns.svg";
 import sheetIcon from "@/../public/images/svg/sheet-view.svg";
 import flash from "@/../public/images/svg/flash.svg";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import CustomPopover from "@/views/components/popover";
 import CustomTable from "@/views/components/table";
 import { Switch } from "@/components/ui/switch";
 import { DataType, mockData } from "@/types/data-type";
 import useDebouncedValue from "@/hooks/useDebounce";
+import SortContent from "@/views/components/sort-content";
+import { sortItems, SortItemType } from "@/data/sort-items";
 
 const HomeView = () => {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 300);
   const [tableData, setTableData] = useState<DataType[]>(mockData);
+  const [selectedFilter, setSelectedFilter] = useState<keyof SortItemType>("name");
+  const [selectedDirection, setSelectedDirection] = useState<string>(
+    sortItems[selectedFilter].directions[0]
+  );
 
   const [headers, setHeaders] = useState<
     { title: string; key: keyof DataType; checked: boolean }[]
@@ -30,6 +32,26 @@ const HomeView = () => {
     { title: "Applied Job", key: "appliedJob", checked: true },
     { title: "Resume", key: "resume", checked: true },
   ]);
+
+  // Sıralanmış veri
+  const sortedData = useMemo(() => {
+    const direction = selectedDirection === "A-Z" || selectedDirection === "Low to High" ? "asc" : "desc";
+    
+    return [...tableData].sort((a, b) => {
+      // Rating için özel sıralama
+      if (selectedFilter === "rating") {
+        return direction === "asc" ? a.rating - b.rating : b.rating - a.rating;
+      }
+      
+      // Diğer alanlar için string sıralama
+      const aValue = a[selectedFilter].toString();
+      const bValue = b[selectedFilter].toString();
+      
+      return direction === "asc"
+        ? aValue.localeCompare(bValue, "tr")
+        : bValue.localeCompare(aValue, "tr");
+    });
+  }, [tableData, selectedFilter, selectedDirection]);
 
   const handleSwitchChange = (index: number) => {
     if (index !== 0) {
@@ -47,7 +69,9 @@ const HomeView = () => {
     } else {
       setTableData(
         mockData.filter((item) =>
-          item.name.toLowerCase().includes(debouncedSearch.toLowerCase())
+          item.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+          item.email.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+          item.appliedJob.toLowerCase().includes(debouncedSearch.toLowerCase())
         )
       );
     }
@@ -64,7 +88,12 @@ const HomeView = () => {
         />
 
         <CustomPopover label="Sort" icon={sortIcon}>
-          <p>Place content for the popover here.</p>
+          <SortContent
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+            selectedDirection={selectedDirection}
+            setSelectedDirection={setSelectedDirection}
+          />
         </CustomPopover>
 
         <CustomPopover label="Columns" icon={columnsIcon}>
@@ -100,7 +129,7 @@ const HomeView = () => {
       </div>
 
       <div className="pt-6 w-full h-full">
-        <CustomTable headers={headers} data={tableData} />
+        <CustomTable headers={headers} data={sortedData} />
       </div>
     </div>
   );
