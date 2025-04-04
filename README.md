@@ -1,3 +1,36 @@
+# Univenn Case
+
+Bu proje, TypeScript, React ve Vite kullanılarak oluşturulmuştur.
+
+## Yaklaşım
+
+Bu projede modern frontend geliştirme yöntemleri kullanılmıştır. Vite, hızlı geliştirme ortamı sağlarken, TypeScript ile tip güvenliği sağlanmıştır. React bileşen tabanlı mimarisi ile uygulama modüler hale getirilmiştir.
+
+## Kurulum ve Çalıştırma
+
+Projeyi çalıştırmak için aşağıdaki adımları takip edebilirsiniz:
+
+```sh
+npm install
+npm run dev
+```
+
+## Deployment
+
+Projenin canlı versiyonuna aşağıdaki linkten ulaşabilirsiniz:
+
+[Deployment Link](https://univenn.vercel.app/)
+
+## Teknolojiler
+
+- React
+- TypeScript
+- Vite
+- Shadcn UI
+- Tailwind
+- Apollo for graphql requests
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
