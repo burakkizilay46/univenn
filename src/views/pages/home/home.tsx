@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo } from "react";
-import sortIcon from "@/../public/images/svg/sort.svg";
-import columnsIcon from "@/../public/images/svg/columns.svg";
-import sheetIcon from "@/../public/images/svg/sheet-view.svg";
-import flash from "@/../public/images/svg/flash.svg";
+import sortIcon from "@/assets/images/svg/sort.svg";
+import columnsIcon from "@/assets/images/svg/columns.svg";
+import sheetIcon from "@/assets/images/svg/sheet-view.svg";
+import flash from "@/assets/images/svg/flash.svg";
 import { Input } from "@/components/ui/input";
 import {
   Popover,

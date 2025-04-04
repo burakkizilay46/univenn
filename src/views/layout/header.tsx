@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import plusIcon from "@/../public/images/svg/plus-icon.svg";
+import plusIcon from "@/assets/images/svg/plus-icon.svg";
 
 const MainHeader = () => {
   return (

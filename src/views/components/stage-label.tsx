@@ -1,4 +1,4 @@
-import downIcon from "@/../public/images/svg/down.svg";
+import downIcon from "@/assets/images/svg/down.svg";
 
 export const StageLabel = ({ title }: { title: string }) => {
   return (

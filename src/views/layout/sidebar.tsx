@@ -1,7 +1,7 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { sidebarBottomItems, sidebarItems } from "@/data/sidebar-items";
-import avatar from "@/../public/images/png/avatar.png"
-import down from "@/../public/images/svg/down.svg"
+import avatar from "@/assets/images/png/avatar.png"
+import down from "@/assets/images/svg/down.svg"
 
 const Sidebar = () => {
   return (

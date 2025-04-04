@@ -1,5 +1,5 @@
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import down from "@/../public/images/svg/down.svg"
+import down from "@/assets/images/svg/down.svg"
 
 interface CustomPopoverProps {
   icon?: string;

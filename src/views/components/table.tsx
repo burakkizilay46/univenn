@@ -1,8 +1,8 @@
 import { useState } from "react";
 import classNames from "classnames";
-import dotsIcon from "@/../public/images/svg/dots.svg";
-import downArrowIcon from "@/../public/images/svg/down-arrow.svg";
-import pdfIcon from "@/../public/images/png/pdf-logo.png";
+import dotsIcon from "@/assets/images/svg/dots.svg";
+import downArrowIcon from "@/assets/images/svg/down-arrow.svg";
+import pdfIcon from "@/assets/images/png/pdf-logo.png";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
