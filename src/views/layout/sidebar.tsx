@@ -3,6 +3,8 @@ import { sidebarBottomItems, sidebarItems } from "@/data/sidebar-items";
 import avatar from "@/assets/images/png/avatar.png"
 import down from "@/assets/images/svg/down.svg"
 
+
+
 const Sidebar = () => {
   return (
     <div className="px-6 w-[290px] max-h-screen flex flex-col justify-between mb-[126px]">

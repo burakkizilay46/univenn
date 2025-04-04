@@ -1,3 +1,10 @@
+import overview from "@/assets/images/svg/overview.svg";
+import jobs from "@/assets/images/svg/jobs.svg";
+import talentPool from "@/assets/images/svg/talent-pool.svg";
+import inbox from "@/assets/images/svg/inbox.svg";
+import support from "@/assets/images/svg/support.svg";
+import settings from "@/assets/images/svg/settings.svg";
+
 type SidebarItemType = {
   logopath: string;
   title: string;
@@ -5,30 +12,30 @@ type SidebarItemType = {
 
 export const sidebarItems: SidebarItemType[] = [
   {
-    logopath: "@/assets/images/svg/overview.svg",
+    logopath: overview,
     title: "Overview",
   },
   {
-    logopath: "@/assets/public/images/svg/jobs.svg",
+    logopath: jobs,
     title: "Jobs",
   },
   {
-    logopath: "@/assets/public/images/svg/talent-pool.svg",
+    logopath: talentPool,
     title: "Talent Pool",
   },
   {
-    logopath: "@/assets/public/images/svg/inbox.svg",
+    logopath: inbox,
     title: "Inbox",
   },
 ];
 
 export const sidebarBottomItems: SidebarItemType[] = [
   {
-    logopath: "@/assets/public/images/svg/support.svg",
+    logopath:support,
     title: "Support",
   },
   {
-    logopath: "@/assets/public/images/svg/settings.svg",
+    logopath: settings,
     title: "Settings",
   },
 ];
